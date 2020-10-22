@@ -64,4 +64,8 @@ public class SystemProcess {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+    
+    public int getID() {
+    	return pid;
+    }
 }
