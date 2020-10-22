@@ -8,6 +8,7 @@ public class Core {
     private int cycle = 1;
     private final ArrayList<SystemProcess> systemProcesses = new ArrayList<>();
     private final int[] prioritiesTime = {20, 30, 40, 60};
+    private ArrayList<Integer> priorities = new ArrayList<>(); 
 
     void routine() { // приоритетный алгоритм
         while (!systemProcesses.isEmpty()) {
@@ -23,6 +24,7 @@ public class Core {
                         break;
                     }
                 }
+                systemProcess.setPriority(priorities.get(systemProcess.getID()));
                 if (!systemProcess.isEmpty()) {
                     systemProcess.launch(prioritiesTime[0]);
                     if (systemProcess.isEmpty()) {
@@ -39,7 +41,8 @@ public class Core {
         for (int i = 0; i < numOfProcesses; i++) {
             int priority = getRandomNumber(0, 3);
             int ID = systemProcesses.size();
-            SystemProcess systemProcess = new SystemProcess(ID, priority);
+            SystemProcess systemProcess = new SystemProcess(ID, priority);           
+            priorities.add(priority);  
             System.out.println("Процесс " + ID + " создан. Приоритет: " + priority);
             systemProcesses.add(systemProcess);
         }
