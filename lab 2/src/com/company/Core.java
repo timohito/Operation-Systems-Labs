@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Core {
-    private final ArrayList<SystemProcess> systemProcesses = new ArrayList<>();
     private final Random random = new Random();
-    private int epoch = 1;
+    private int cycle = 1;
+    private final ArrayList<SystemProcess> systemProcesses = new ArrayList<>();
     private final int[] prioritiesTime = {20, 30, 40, 60};
 
     void routine() { // приоритетный алгоритм
         while (!systemProcesses.isEmpty()) {
-            System.out.println(epoch + "-й цикл");
+            System.out.println(cycle + "-й цикл");
             for (int i = 0; i < systemProcesses.size(); i++) {
                 SystemProcess systemProcess = systemProcesses.get(i);
-                while (systemProcess.getPriority() > 0) {
-                    systemProcess.launch(prioritiesTime[systemProcess.getPriority()]);
-                    systemProcess.setPriority(systemProcess.getPriority() - 1);
+                while (systemProcess.getPriority() > 0) { // пока приоритет процесса не снизится до 0
+                    systemProcess.launch(prioritiesTime[systemProcess.getPriority()]); // запускаем проц, выдаем время по приоритету
+                    systemProcess.setPriority(systemProcess.getPriority() - 1); 
                     if (systemProcess.isEmpty()) {
                         systemProcesses.remove(i);
                         i--;
@@ -31,7 +31,7 @@ public class Core {
                     }
                 }
             }
-            epoch++;
+            cycle++;
         }
     }
 
