@@ -21,9 +21,9 @@ public class Process {
         return ID;
     }
     
-    public LinkedList<Page> getVirtualMemory() {
-        return virtualMemory;
-    }
+//    public LinkedList<Page> getVirtualMemory() {
+//        return virtualMemory;
+//    }
     
     public Page getPageThroughID(int ID){
     	
