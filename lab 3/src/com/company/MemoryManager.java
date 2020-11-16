@@ -10,11 +10,16 @@ public class MemoryManager {
     private static final int pageCap = 32;
     private final LinkedList<Process> processList = new LinkedList<>();
     private Random rand = new Random();
+    private HDD hdd = new HDD();
     
 
     public void routine() {
         for (int loop = 0; loop < 30; loop++) {
             for (Process process : processList) {
+                if(physMemory.isReadyForSwapping()){
+                    swapping(process);
+                    continue;
+                }
                 int index = rand.nextInt(process.getVirtualMemory().size());
                 Page currentPage = process.getVirtualMemory().get(index);
                 int action = rand.nextInt(2);
@@ -29,7 +34,11 @@ public class MemoryManager {
                         System.out.println("Страница: " + currentPage.getID() + " Процесс: " + process.getID() +
                                 " Физ. память: " + currentPage.getPhysPageID() + " Модификация");
                     }
-                } else if (pmem[physMemory.getMaxPages() - 1] == null) {
+                } 
+                	
+                
+                	
+                 else if (pmem[physMemory.getMaxPages() - 1] == null) {
                     for (int i = 0; i < physMemory.getMaxPages(); i++) {
                         if (pmem[i] == null) {
                             currentPage.setInPhysMemory(true);
@@ -39,7 +48,13 @@ public class MemoryManager {
                             break;
                         }
                     }
-                } else {
+                } 
+                 
+                 else {                	 
+                	 if(hdd.isInHDD(currentPage) != null) 
+                     {
+                    	 currentPage = hdd.isInHDD(currentPage);
+                     }
                     System.out.println("\nВыполняется страничное прерывание");
                     Arrays.sort(pmem);
                     for (Page page : pmem) {
@@ -65,6 +80,20 @@ public class MemoryManager {
         }
     }
 
+    public void swapping(Process process) {
+        System.out.println("Выполенение свопинга...");
+        Page[] pm = physMemory.getPageTable();
+        for (int i = 0; i < process.getVirtualMemory().size(); i++) {
+            Page badPage = pm[i];
+            if (badPage != null) {
+            	System.out.println("Перенос на диск");
+            	hdd.add(badPage);            
+            pm[i] = process.getVirtualMemory().get(i);
+            System.out.println("Добавление страницы " + pm[i].getID() + " процесса " + pm[i].getProcessID());
+            }
+        }
+        
+    }
 
     MemoryManager() {
         physMemory = new PageTable(memoryCap / pageCap);
@@ -72,4 +101,6 @@ public class MemoryManager {
             processList.add(new Process(i));
         }
     }
+    
+   
 }

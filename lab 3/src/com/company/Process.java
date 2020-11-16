@@ -24,5 +24,19 @@ public class Process {
     public LinkedList<Page> getVirtualMemory() {
         return virtualMemory;
     }
+    
+    public Page getPageThroughID(int ID){
+    	
+		for(int i = 0; i < getPageCount(); i++) {
+			if(ID == virtualMemory.get(i).getID()) {
+				return virtualMemory.get(i);
+			}			
+		}
+		return null;
+    }
+    
+    public int getPageCount() {
+    	return virtualMemory.size();
+    }
 
 }
