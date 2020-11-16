@@ -20,8 +20,8 @@ public class MemoryManager {
                     swapping(process);
                     continue;
                 }
-                int index = rand.nextInt(process.getVirtualMemory().size());
-                Page currentPage = process.getVirtualMemory().get(index);
+                int index = rand.nextInt(process.getPageCount());
+                Page currentPage = process.getPageThroughID(index);
                 int action = rand.nextInt(2);
                 Page[] pmem = physMemory.getPageTable();
                 if (currentPage.isInPhysMemory()) {
@@ -83,12 +83,12 @@ public class MemoryManager {
     public void swapping(Process process) {
         System.out.println("Выполенение свопинга...");
         Page[] pm = physMemory.getPageTable();
-        for (int i = 0; i < process.getVirtualMemory().size(); i++) {
+        for (int i = 0; i < process.getPageCount(); i++) {
             Page badPage = pm[i];
             if (badPage != null) {
             	System.out.println("Перенос на диск");
             	hdd.add(badPage);            
-            pm[i] = process.getVirtualMemory().get(i);
+            pm[i] = process.getPageThroughID(pm[i].getID());
             System.out.println("Добавление страницы " + pm[i].getID() + " процесса " + pm[i].getProcessID());
             }
         }
