@@ -33,6 +33,7 @@ public class Draw {
     private final JLabel labelSizeDisk = new JLabel("Disk size");
     private final JLabel labelSizeSector = new JLabel("Sector size");
     private JTree tree;
+
     private DefaultMutableTreeNode treeFile;
 
 
@@ -134,7 +135,7 @@ public class Draw {
         });
     }
 
-    private void startModifyTree(ArrayList<FileManager> child) {
+    private void startModifyTree(ArrayList<File> child) {
         treeFile = new DefaultMutableTreeNode(fileManager.getRootFile());
         modifyTree(treeFile, child);
         if (!Objects.isNull(tree)) {
@@ -158,13 +159,15 @@ public class Draw {
         tree.setScrollsOnExpand(true);
     }
 
-    private void modifyTree(DefaultMutableTreeNode treeFile, ArrayList<FileManager> child) {
-        for (FileManager file : child) {
+    private void modifyTree(DefaultMutableTreeNode treeFile, ArrayList<File> child) {
+        for (File file : child) {
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file);
             treeFile.add(newNode);
-            if (file.isFolder()) {
-                modifyTree(newNode, file.getChild());
+            if (file.getClass() == Catalog.class) {
+                modifyTree(newNode, ((Catalog)file).getChild());
             }
         }
     }
+
+
 }

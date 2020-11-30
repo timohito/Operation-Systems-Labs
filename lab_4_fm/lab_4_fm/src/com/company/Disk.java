@@ -23,13 +23,13 @@ public class Disk {
         return null;
     }
 
-    public void search(FileManager file) {
+    public void search(File file) {
         int buf = -2;
         for (int i = 0, writeCl = 0; i < clusters.length && writeCl != file.getSize(); i++) {
             if (clusters[i].getStatus() == ClusterStatus.EMPTY) {
                 clusters[i].setStatus(ClusterStatus.IN_USE);
                 if (buf == -2) {
-                    file.setIndexFirstCell(i);
+                    setIndexFirstCell(i);
                 }
                 else {
                     clusters[buf].setIndex(i);
@@ -45,7 +45,7 @@ public class Disk {
 
     public void chooseNotChosenFile(FileManager file) {
         if (file.isFolder()) {
-            for (int i = 0; i <file.getChild().size(); i++) {
+            for (int i = 0; i < file.getChild().size(); i++) {
                 chooseNotChosenFile(file.getChild().get(i));
             }
         }
@@ -84,7 +84,7 @@ public class Disk {
         }
     }
 
-    public void deleteFile(FileManager file) {
+    public void deleteFile(File file) {
         if (!file.isFolder()) {
             int index = file.getIndexFirstCell();
             for (int i = 0; i < file.getSize(); i++) {
@@ -96,13 +96,18 @@ public class Disk {
             }
         }
         if (file.isFolder()) {
-            ArrayList<FileManager> deletedChild = file.getChild();
+            ArrayList<File> deletedChild = file.getChild();
             for (int i = 0; i < deletedChild.size(); i++) {
                 deleteFile(deletedChild.get(deletedChild.size()-1));
             }
             clusters[file.getIndexFirstCell()].setStatus(ClusterStatus.EMPTY);
         }
     }
+
+    public void setIndexFirstCell(int indexFirstCell) {
+        this.indexFirstCell = indexFirstCell;
+    }
+
 
     public int getClSize() {
         return clusters.length;
