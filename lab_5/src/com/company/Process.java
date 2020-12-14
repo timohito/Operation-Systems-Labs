@@ -34,7 +34,7 @@ public class Process implements Cloneable {
         }
     }
 
-    public void launchWithBlockAndInputOutputChecking(ArrayList<Process> procsBlocked, PropertiesInputOutput propertiesInputOutput) {
+    public void launchWithBlockAndInputOutputChecking(ArrayList<Process> procsBlocked, Core propertiesInputOutput) {
         if (timeProcess == 0) {
             return;
         }
@@ -52,7 +52,7 @@ public class Process implements Cloneable {
         }
     }
 
-    public void launchUsingInputOutput(int time, PropertiesInputOutput propertiesInputOutput) {
+    public void launchUsingInputOutput(int time, Core propertiesInputOutput) {
         for (; time > 0; time--) {
             if (propertiesInputOutput.timePointWhenUsingIO == timeProcess) {
                 propertiesInputOutput.startUsing = true;
